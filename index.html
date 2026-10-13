@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'">
+<title>SALUS Outreach Desk</title>
+<style>
+:root{--ink:#17333b;--muted:#66787e;--line:#dbe5e6;--bg:#f3f7f5;--card:#fff;--accent:#1d746c;--accent2:#e2f1ed;--warn:#8a5a21;--danger:#8a3b34}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial;color:var(--ink);background:var(--bg)}.app{display:grid;grid-template-columns:245px 1fr;min-height:100vh}.side{background:#153b3d;color:#eef7f4;padding:22px 18px;display:flex;flex-direction:column}.brand{display:flex;gap:11px;align-items:center;font-weight:800;padding:4px 4px 22px}.mark{width:34px;height:34px;border-radius:11px;background:#e6f4ef;color:#15534e;display:grid;place-items:center;font-weight:900}.side h3{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:#abc4bf;margin:12px 4px 8px}.account{display:block;width:100%;border:0;text-align:left;background:transparent;color:#d7e8e5;padding:9px 10px;border-radius:10px;cursor:pointer}.account:hover{background:rgba(255,255,255,.10)}.sidefoot{margin-top:auto;color:#abc4bf;font-size:12px;line-height:1.45}.main{padding:32px 40px 50px;max-width:1100px;width:100%;margin:0 auto}.top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:24px}.top h1{font-size:31px;margin:0 0 4px}.top p{margin:0;color:var(--muted)}.safe{font-size:12px;border:1px solid var(--line);background:white;border-radius:999px;padding:8px 11px;color:var(--muted)}.panel{background:white;border:1px solid var(--line);border-radius:20px;padding:26px;box-shadow:0 8px 28px rgba(26,59,60,.06);margin-bottom:18px}.panel h2{margin:0 0 16px;font-size:22px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:13px}.full{grid-column:1/-1}label{display:block;font-size:12px;font-weight:750;color:#536b71;margin-bottom:6px}input,textarea{width:100%;padding:12px 13px;border:1px solid var(--line);border-radius:12px;font:inherit;outline:none;background:white}textarea{min-height:105px;resize:vertical}input:focus,textarea:focus{border-color:#82b9af;box-shadow:0 0 0 3px #e8f3f0}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:17px}.btn{border:0;border-radius:12px;background:var(--accent);color:white;padding:12px 16px;font-weight:750;cursor:pointer}.quiet{background:#f3f6f5;color:var(--ink);border:1px solid var(--line)}.status{margin-top:14px;padding:12px 14px;border-radius:12px;background:#f6f8f7;color:var(--muted);font-size:13px}.status.warn{background:#fbf4e8;color:#7b5525}.status.error{background:#faecea;color:#7d3d36}.hidden{display:none}.email{border:1px solid var(--line);border-radius:15px;overflow:hidden}.row{padding:11px 14px;border-bottom:1px solid #e7eded;display:grid;grid-template-columns:72px 1fr;gap:8px;font-size:14px}.row b{color:#54686e}.body{padding:18px;white-space:pre-line;line-height:1.62;min-height:160px}.note{color:var(--muted);font-size:13px;line-height:1.5}.step{display:inline-block;background:var(--accent2);color:var(--accent);font-weight:800;font-size:11px;border-radius:999px;padding:5px 8px;margin-right:7px}
+@media(max-width:800px){.app{grid-template-columns:1fr}.side{display:none}.main{padding:20px}.grid{grid-template-columns:1fr}.safe{display:none}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="side">
+  <div class="brand"><div class="mark">S</div><div>SALUS<br><span style="font-weight:500;color:#aec7c2;font-size:12px">Outreach Desk</span></div></div>
+  <h3>Open work</h3><div id="accounts"><div class="note" style="color:#abc4bf;padding:4px">Loading…</div></div>
+  <div class="sidefoot">Your work stays in this browser on this Mac. The Desk prepares email only and never sends it.
+    <div style="margin-top:12px"><button class="btn quiet" onclick="SALUSLocal.backup().then(()=>setStatus('prepStatus','Backup saved to Downloads.')).catch(e=>setStatus('prepStatus',e.message,'error'))">Save work backup</button></div>
+    <div style="margin-top:8px"><label for="restoreFile" style="color:#abc4bf;cursor:pointer">Restore a saved backup</label><input id="restoreFile" type="file" accept=".json,application/json" style="display:none" onchange="SALUSLocal.restore(this.files[0]).then(()=>loadWorkspace()).then(()=>setStatus('prepStatus','Backup restored.')).catch(e=>setStatus('prepStatus',e.message,'error'))"></div>
+  </div>
+</aside>
+<main class="main">
+  <div class="top"><div><h1>Good morning, Nicole.</h1><p>Prepare a SALUS email using the facts you have.</p></div><div class="safe">Prepares email only · never sends</div></div>
+
+  <section class="panel">
+    <h2>Who are you working on?</h2>
+    <div class="grid">
+      <div><label>Organisation</label><input id="account" autocomplete="organization" placeholder="Organisation name"></div>
+      <div><label>Person</label><input id="contact" autocomplete="name" placeholder="Contact name, if known"></div>
+      <div><label>Email</label><input id="to" autocomplete="email" placeholder="Supported email address"></div>
+      <div><label>Role</label><input id="role" placeholder="Role, if known"></div>
+      <div class="full"><label>What happened / what needs doing</label><textarea id="context" placeholder="Example: I spoke with her yesterday and she asked me to send information about SALUS."></textarea></div>
+      <div class="full"><label>Anything else worth knowing</label><textarea id="notes" placeholder="Optional notes. If you do not know something, leave it blank."></textarea></div>
+    </div>
+    <div class="actions">
+      <button class="btn" onclick="prepareInChatGPT()">Prepare in ChatGPT</button>
+      <button class="btn quiet" onclick="clearForm()">Start another</button>
+    </div>
+    <div id="prepStatus" class="status hidden"></div>
+  </section>
+
+  <section class="panel">
+    <h2>Bring the draft back</h2>
+    <p class="note"><span class="step">1</span>Paste the prepared request into ChatGPT and send it. <span class="step">2</span>Copy ChatGPT's JSON reply. <span class="step">3</span>Paste it below and import.</p>
+    <textarea id="response" style="min-height:150px" placeholder="Paste ChatGPT's JSON reply here"></textarea>
+    <div class="actions">
+      <button class="btn" onclick="importDraft()">Import Draft</button>
+      <button class="btn quiet" onclick="pasteClipboard()">Paste from clipboard</button>
+    </div>
+    <div id="importStatus" class="status hidden"></div>
+  </section>
+
+  <section id="packetFallback" class="panel hidden">
+    <h2>Request ready</h2><p class="note">Click Copy request, then paste into ChatGPT.</p>
+    <textarea id="packetText" readonly style="min-height:160px"></textarea>
+    <div class="actions"><button class="btn" onclick="copyPrepared()">Copy request</button></div>
+  </section>
+
+  <section id="result" class="panel hidden">
+    <h2>Your email is ready.</h2>
+    <div class="email">
+      <div class="row"><b>To</b><span id="rto"></span></div>
+      <div class="row"><b>Subject</b><span id="rsubject"></span></div>
+      <div class="body" id="rbody"></div>
+    </div>
+    <div class="actions"><button class="btn" onclick="copyEmail()">Copy email</button></div>
+    <div id="copyStatus" class="status hidden">Copied. Nothing has been sent.</div>
+  </section>
+</main>
+</div>
+<script src="./local-adapter.js?v=20261013a"></script>
+<script>
+let workspace={accounts:[]};
+
+function value(id){return document.getElementById(id).value.trim()}
+function setStatus(id,msg,kind=''){const el=document.getElementById(id);el.className='status '+kind;el.textContent=msg;el.classList.remove('hidden')}
+function hideStatus(id){document.getElementById(id).classList.add('hidden')}
+
+async function loadWorkspace(){
+  try{
+    const r=await SALUSLocal.fetch('/api/manual/workspace',{cache:'no-store'});const j=await r.json();if(!j.ok)throw new Error(j.error||'Could not load work.');
+    workspace=j;const wrap=document.getElementById('accounts');wrap.innerHTML='';
+    if(!j.accounts.length){wrap.innerHTML='<div class="note" style="color:#abc4bf;padding:4px">No saved work yet.</div>';return}
+    j.accounts.forEach((a,i)=>{const b=document.createElement('button');b.className='account';b.textContent=a.accountName;b.onclick=()=>loadAccount(i);wrap.appendChild(b)})
+  }catch(e){document.getElementById('accounts').innerHTML='<div class="note" style="color:#abc4bf;padding:4px">Work list unavailable.</div>'}
+}
+function loadAccount(i){
+  const a=workspace.accounts[i];if(!a)return;
+  document.getElementById('account').value=a.accountName||'';
+  document.getElementById('contact').value=a.contactName||'';
+  document.getElementById('to').value=a.to||'';
+  document.getElementById('role').value=a.role||'';
+  document.getElementById('context').value=a.context||'';
+  document.getElementById('notes').value=a.notes||'';
+  if(a.email)renderEmail(a.email);else document.getElementById('result').classList.add('hidden');
+}
+function clearForm(){['account','contact','to','role','context','notes','response'].forEach(id=>document.getElementById(id).value='');document.getElementById('result').classList.add('hidden');hideStatus('prepStatus');hideStatus('importStatus')}
+
+async function prepareInChatGPT(){
+  hideStatus('prepStatus');
+  const tab=window.open('about:blank','_blank');
+  try{
+    const payload={accountName:value('account'),contactName:value('contact'),to:value('to'),role:value('role'),context:value('context'),notes:value('notes')};
+    const r=await SALUSLocal.fetch('/api/manual/prepare',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(payload)});
+    const j=await r.json();if(!j.ok)throw new Error(j.error||'Could not prepare this item.');
+    try{await navigator.clipboard.writeText(j.packetText)}
+    catch{
+      document.getElementById('packetText').value=j.packetText;
+      document.getElementById('packetFallback').classList.remove('hidden');
+      if(tab)tab.close();
+      setStatus('prepStatus','Request prepared. Click Copy request below to copy it into ChatGPT.','warn');
+      await loadWorkspace();
+      return;
+    }
+    if(tab)tab.location='https://chatgpt.com/';else window.open('https://chatgpt.com/','_blank');
+    setStatus('prepStatus','Prepared request copied. ChatGPT is opening now. Paste and send it there. Nothing has been sent to the contact.');
+    await loadWorkspace();
+  }catch(e){
+    if(tab)tab.close();setStatus('prepStatus',e.message||String(e),'error');
+  }
+}
+async function copyPrepared(){
+  const field=document.getElementById('packetText');
+  try{await navigator.clipboard.writeText(field.value)}
+  catch{field.focus();field.select();if(!document.execCommand('copy')){setStatus('prepStatus','Please copy the selected request, then paste it into ChatGPT.','warn');return}}
+  document.getElementById('packetFallback').classList.add('hidden');
+  setStatus('prepStatus','Request copied. Opening ChatGPT.');
+  window.open('https://chatgpt.com/','_blank');
+}
+async function pasteClipboard(){
+  try{document.getElementById('response').value=await navigator.clipboard.readText();setStatus('importStatus','Pasted from clipboard. Review if you want, then click Import Draft.')}
+  catch{setStatus('importStatus','Clipboard read is unavailable here. Paste the ChatGPT reply normally into the box above.','warn')}
+}
+async function importDraft(){
+  hideStatus('importStatus');
+  try{
+    const r=await SALUSLocal.fetch('/api/manual/import',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({responseText:value('response')})});
+    const j=await r.json();
+    if(!j.ok)throw new Error((j.errors||[j.error||'Import failed.']).join(' | '));
+    if(j.status==='HOLD'){setStatus('importStatus',j.hold?.question||j.hold?.reason||'More information is needed before an email can be prepared.','warn');return}
+    renderEmail(j.email);setStatus('importStatus','Draft checked and saved locally. Nothing has been sent.');await loadWorkspace();
+  }catch(e){setStatus('importStatus',e.message||String(e),'error')}
+}
+function renderEmail(email){
+  document.getElementById('rto').textContent=email.to||'';
+  document.getElementById('rsubject').textContent=email.subject||'';
+  document.getElementById('rbody').textContent=email.body||'';
+  document.getElementById('result').classList.remove('hidden');
+}
+async function copyEmail(){
+  const text='To: '+document.getElementById('rto').textContent+'\nSubject: '+document.getElementById('rsubject').textContent+'\n\n'+document.getElementById('rbody').innerText;
+  try{await navigator.clipboard.writeText(text);document.getElementById('copyStatus').classList.remove('hidden')}
+  catch{setStatus('copyStatus','Copy is unavailable here. Select the email and copy it normally.','warn')}
+}
+loadWorkspace();
+</script>
+</body>
+</html>
